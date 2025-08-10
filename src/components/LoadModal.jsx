@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from 'react';
+
 export default function LoadModal({ isOpen, onClose, onLoad }){
-  const [saves,setSaves]=useState([]);
-  useEffect(()=>{ if(isOpen){ const ms=JSON.parse(localStorage.getItem('pf_manual_saves')||'[]'); setSaves(ms); } },[isOpen]);
+  const [saves, setSaves] = useState([]);
+
+  useEffect(()=>{
+    if(isOpen){
+      try{
+        const ms = JSON.parse(localStorage.getItem('pf_manual_saves')||'[]');
+        setSaves(ms);
+      }catch(e){ setSaves([]); }
+    }
+  },[isOpen]);
+
   if(!isOpen) return null;
   return (
     <div className='modalBackdrop'>
       <div className='modal'>
         <h3>Load Save</h3>
-        {saves.length===0 && <div className='notice'>No saves found.</div>}
+        {saves.length===0 && <div className='notice'>No saves found. Use Save to create one.</div>}
         <ul className='savedList'>
-          {saves.map((s,i)=>(
+          {saves.map((s, i)=>(
             <li key={i}>
-              <div><strong>{s.name}</strong><br/><small>{new Date(s.ts).toLocaleString()}</small></div>
-              <div><button onClick={()=>onLoad(s.session)}>Load</button></div>
+              <div>
+                <strong>{s.name}</strong><br/><small>{new Date(s.ts).toLocaleString()}</small>
+              </div>
+              <div>
+                <button onClick={()=>onLoad(s.session)}>Load</button>
+              </div>
             </li>
           ))}
         </ul>
