@@ -9,7 +9,7 @@ export default function Results({ savedResults, onBack }) {
         {savedResults.map((s, i) => (
           <li key={i}>
             <div>
-              <strong>{s.winnerName}</strong><br />
+              <strong>{s.winnerName}</strong><br/>
               <small>{new Date(s.timestamp).toLocaleString()}</small>
             </div>
             <div>
@@ -27,7 +27,6 @@ export default function Results({ savedResults, onBack }) {
           </li>
         ))}
       </ul>
-
       <div style={{marginTop:20}}>
         <button className='secondary' onClick={onBack}>Back</button>
       </div>
