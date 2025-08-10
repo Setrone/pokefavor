@@ -1,11 +1,12 @@
 {
-  "name": "pokefavor-v2.1-fix",
+  "name": "pokefavor-v2.2",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "fetch-list": "node scripts/fetch_pokemon_list.js"
   },
   "dependencies": {
     "react": "^18.2.0",

@@ -1,5 +1,4 @@
 import React from 'react';
-
 export default function Header({ startVoting, savedResults, setFlow, saveManual, openLoadModal }){
   return (
     <header className='header'>
@@ -7,7 +6,7 @@ export default function Header({ startVoting, savedResults, setFlow, saveManual,
         <span className='pokefavorLogo'>PokéFavor</span>
       </div>
       <div className='header-actions'>
-        <button className='secondary' onClick={()=>startVoting(false)}>Start</button>
+        <button className='primary' onClick={()=>startVoting(false)}>Start</button>
         <button className='secondary' onClick={openLoadModal}>Load</button>
         <button className='secondary' onClick={saveManual}>Save</button>
         <button className='secondary' onClick={()=>setFlow('results')}>Results ({savedResults.length})</button>

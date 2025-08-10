@@ -12,6 +12,28 @@ function isExcluded(name){
   return s.includes('mega') || s.includes('gmax') || s.includes('gigantamax') || s.includes('dynamax') || (s.includes('dyna') && s.includes('max'));
 }
 
+// static type -> gradient mapping (instant)
+const TYPE_GRADIENT = {
+  normal: ['#A8A77A','#6B6B4E'],
+  fire: ['#FFB56B','#EE8130'],
+  water: ['#9BD0FF','#6390F0'],
+  electric: ['#FFF59B','#F7D02C'],
+  grass: ['#CFFFCB','#7AC74C'],
+  ice: ['#DDF7FA','#96D9D6'],
+  fighting: ['#F0B1A8','#C22E28'],
+  poison: ['#E6C0F0','#A33EA1'],
+  ground: ['#F0D8A8','#E2BF65'],
+  flying: ['#EAD9FF','#A98FF3'],
+  psychic: ['#FFCFEA','#F95587'],
+  bug: ['#E9F7C7','#A6B91A'],
+  rock: ['#E7D6B5','#B6A136'],
+  ghost: ['#D6CFF6','#735797'],
+  dragon: ['#E6DAFF','#6F35FC'],
+  dark: ['#CFC7C0','#705746'],
+  steel: ['#E6E9EE','#B7B7CE'],
+  fairy: ['#FFE7F0','#D685AD']
+};
+
 export default function App(){
   const [allPokemon, setAllPokemon] = useState(null);
   const [deck, setDeck] = useState([]);
@@ -19,17 +41,16 @@ export default function App(){
   const [flow, setFlow] = useState('idle'); // idle, voting, results
   const winnersRef = useRef([]);
   const [savedResults, setSavedResults] = useState(()=>{ try{ return JSON.parse(localStorage.getItem('pf_saved'))||[] }catch{ return [] } });
-  const [bgColor, setBgColor] = useState('#05060a');
+  const [bgGradient, setBgGradient] = useState(['#05060a','#05060a']);
   const [fadeKey, setFadeKey] = useState(0);
   const resumeRef = useRef(null);
   const [showLoadModal, setShowLoadModal] = useState(false);
 
-  // force dark mode only
   useEffect(()=>{ document.documentElement.setAttribute('data-theme','dark'); },[]);
 
   useEffect(()=>{
     if(!allPokemon){
-      fetch(`${POKEAPI_BASE}/pokemon?limit=20000`).then(r=>r.json()).then(j=>{
+      fetch(`${POKEAPI_BASE}/pokemon?limit=100000&offset=0`).then(r=>r.json()).then(j=>{
         const filtered = j.results.filter(p=>!isExcluded(p.name));
         setAllPokemon(filtered);
         const session = JSON.parse(localStorage.getItem('pf_session') || 'null');
@@ -39,11 +60,8 @@ export default function App(){
   },[allPokemon]);
 
   function shuffle(arr){
-    const a = [...arr];
-    for(let i=a.length-1;i>0;i--){
-      const r = Math.floor(Math.random()*(i+1));
-      [a[i],a[r]] = [a[r],a[i]];
-    }
+    const a=[...arr];
+    for(let i=a.length-1;i>0;i--){ const r=Math.floor(Math.random()*(i+1)); [a[i],a[r]]=[a[r],a[i]]; }
     return a;
   }
 
@@ -53,19 +71,14 @@ export default function App(){
       const lookup = Object.fromEntries(allPokemon.map(p=>[p.name,p]));
       let pool = resumeRef.current.deck.map(n=>lookup[n]).filter(Boolean);
       if(pool.length===0) pool = shuffle(allPokemon);
-      setDeck(pool); setIndex(resumeRef.current.index||0); setFlow('voting'); setFadeKey(k=>k+1); resumeRef.current = null; return;
+      setDeck(pool); setIndex(resumeRef.current.index||0); setFlow('voting'); setFadeKey(k=>k+1); resumeRef.current=null; return;
     }
     const pool = shuffle(allPokemon);
-    setDeck(pool); setIndex(0); winnersRef.current = []; setFlow('voting'); setFadeKey(k=>k+1);
-    // preload first few images for snappy feel
-    for(let i=0;i<6 && i<pool.length;i++){
-      const id = pool[i].url.match(/\/pokemon\/(\d+)\/?$/)[1];
-      const img = new Image();
-      img.src = ARTWORK(id);
-    }
+    setDeck(pool); setIndex(0); winnersRef.current=[]; setFlow('voting'); setFadeKey(k=>k+1);
+    for(let i=0;i<6 && i<pool.length;i++){ const id = pool[i].url.match(/\/pokemon\/(\d+)\/?$/)[1]; const img=new Image(); img.src = ARTWORK(id); }
   }
 
-  // auto-save session to "auto" manual saves area in addition to pf_session
+  // autosave session
   useEffect(()=>{
     if(flow==='voting' && deck.length>0){
       const session = { deck: deck.map(d=>d.name), index };
@@ -97,16 +110,14 @@ export default function App(){
     return true;
   }
 
-  function onVote(pokemon, liked, color){
+  function onVote(pokemon, liked, primaryType){
     if(liked) winnersRef.current.push(pokemon);
-    if(color){ setBgColor(color); setFadeKey(k=>k+1); }
+    // set gradient instantly from primary type mapping
+    const grad = TYPE_GRADIENT[primaryType] || ['#111','#000'];
+    setBgGradient(grad); setFadeKey(k=>k+1);
     const next = index + 1;
-    for(let i=next;i<Math.min(deck.length,next+3);i++){
-      const id = deck[i].url.match(/\/pokemon\/(\d+)\/?$/)[1];
-      const img = new Image();
-      img.src = ARTWORK(id);
-    }
-    // delay so the card fully exits before next is centered
+    for(let i=next;i<Math.min(deck.length,next+3);i++){ const id = deck[i].url.match(/\/pokemon\/(\d+)\/?$/)[1]; const img=new Image(); img.src = ARTWORK(id); }
+    // wait for card exit animation (360ms) before showing next
     setTimeout(()=>{
       if(next>=deck.length){
         const winners = winnersRef.current;
@@ -115,7 +126,7 @@ export default function App(){
           const rec = { timestamp: new Date().toISOString(), winner: winners[0], winnerName: winners[0].name };
           const ns = [rec,...savedResults].slice(0,50); setSavedResults(ns); localStorage.setItem('pf_saved', JSON.stringify(ns)); setFlow('results'); localStorage.removeItem('pf_session');
         } else {
-          setDeck(winners); winnersRef.current = []; setIndex(0);
+          setDeck(winners); winnersRef.current=[]; setIndex(0);
           const session = { deck: winners.map(d=>d.name), index:0 }; localStorage.setItem('pf_session', JSON.stringify(session));
         }
       } else { setIndex(next); }
@@ -134,7 +145,7 @@ export default function App(){
 
   return (
     <div className='app'>
-      <div className='bg-layer' style={{ backgroundColor: bgColor }} key={fadeKey} />
+      <div className='bg-layer' style={{ background: `linear-gradient(180deg, ${bgGradient[0]}, ${bgGradient[1]})` }} key={fadeKey} />
       <Header startVoting={startVoting} savedResults={savedResults} setFlow={setFlow} saveManual={manualSavePrompt} openLoadModal={openLoadModal} />
       <main className='main'>
         { !allPokemon && <div className='notice'>Loading Pokémon list…</div> }
@@ -151,13 +162,13 @@ export default function App(){
         ) }
         { allPokemon && flow==='voting' && deck.length>0 && index<deck.length && (
           <div className='swipeArea'>
-            <SwipeCard key={deck[index].name+index} pokemon={deck[index]} onDecision={(liked,color)=>onVote(deck[index],liked,color)} />
+            <SwipeCard key={deck[index].name+index} pokemon={deck[index]} onDecision={(liked,primary)=>onVote(deck[index],liked,primary)} />
           </div>
         ) }
         { flow==='results' && <Results savedResults={savedResults} onBack={()=>setFlow('idle')} /> }
       </main>
       <LoadModal isOpen={showLoadModal} onClose={closeLoadModal} onLoad={(session)=>{ if(loadSession(session)){ closeLoadModal(); } else alert('Unable to load — items missing.'); }} />
-      <footer className='footer'><small>PokéFavor v2.1 — Data from PokeAPI</small></footer>
+      <footer className='footer'><small>PokéFavor v2.2 — Data from PokeAPI</small></footer>
     </div>
   );
 }
