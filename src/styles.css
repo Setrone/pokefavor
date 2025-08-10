@@ -1,0 +1,75 @@
+:root {
+  --bg: #05060a;
+  --card: #0b1220;
+  --muted: #9aa4b2;
+  --text: #eaf2ff;
+  --accent: #ff595e;
+  --glass: rgba(255,255,255,0.03);
+  --shadow: 0 10px 30px rgba(2,6,23,0.6);
+}
+
+[data-theme='light'] {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --muted: #475569;
+  --text: #071124;
+  --accent: #ef4444;
+  --glass: rgba(255,255,255,0.6);
+  --shadow: 0 8px 24px rgba(15,23,42,0.06);
+}
+
+* { box-sizing: border-box; }
+body, html, #root { height:100%; margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background: radial-gradient(circle at 10% 10%, rgba(255,255,255,0.02), transparent), var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+.app { min-height:100vh; display:flex; flex-direction:column; align-items:center; }
+
+.header { width:100%; max-width:1100px; padding:12px 18px; display:flex; justify-content:space-between; align-items:center; margin-top:18px; }
+.brand { font-weight:700; font-size:1.15rem; letter-spacing:-0.5px; }
+.header-actions { display:flex; gap:10px; align-items:center; }
+
+button { cursor:pointer; border-radius:10px; padding:8px 12px; border:none; background:transparent; color:var(--text); }
+button.primary { background:var(--accent); color:white; box-shadow:var(--shadow); }
+button.secondary { background:rgba(255,255,255,0.03); color:var(--text); border:1px solid rgba(255,255,255,0.02); }
+
+.toggle { display:flex; gap:8px; align-items:center; background:rgba(255,255,255,0.02); padding:6px 8px; border-radius:8px; }
+.toggle input { width:18px; height:18px; }
+
+.main { width:100%; max-width:760px; padding:18px; display:flex; flex-direction:column; align-items:center; gap:18px; }
+
+.hero { text-align:center; padding:20px; border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005)); box-shadow:var(--shadow); width:100%; }
+.hero h1 { margin:6px 0; font-size:2rem; }
+.muted { color:var(--muted); }
+
+.swipeArea { width:100%; display:flex; flex-direction:column; align-items:center; gap:12px; }
+.hint { color:var(--muted); font-size:0.9rem; }
+.progress { color:var(--muted); font-size:0.9rem; }
+
+.swipeCardWrap { width:100%; display:flex; justify-content:center; align-items:center; min-height:460px; }
+.swipeCard { width:100%; max-width:520px; border-radius:18px; overflow:hidden; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow: var(--shadow); transform-origin:center; position:relative; }
+
+.cardHero { height:420px; display:flex; align-items:center; justify-content:center; background-size:cover; background-position:center; }
+.artWrap { width:100%; display:flex; align-items:center; justify-content:center; position:relative; }
+.artWrap img { max-width:92%; max-height:92%; transform:translateY(6px); user-select:none; pointer-events:none; }
+.artWrap .thumb { filter: blur(8px) saturate(0.9); transform: scale(1.02); transition: opacity 280ms ease; opacity:0.95; }
+
+.placeholder { width:160px; height:160px; background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border-radius:14px; }
+
+.cardInfo { padding:14px 18px; display:flex; justify-content:space-between; align-items:center; gap:12px; background:linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.25)); }
+.cardInfo h2 { margin:0; font-size:1.25rem; }
+.actions { display:flex; gap:10px; }
+.btn { padding:10px 14px; border-radius:10px; border:none; font-weight:600; cursor:pointer; }
+.btn.like { background: linear-gradient(90deg,var(--accent), #ff8a80); color:white; box-shadow: var(--shadow); }
+.btn.dislike { background: rgba(255,255,255,0.03); color:var(--text); border:1px solid rgba(255,255,255,0.03); }
+
+.notice { padding:12px 14px; border-radius:10px; background:rgba(255,255,255,0.02); color:var(--muted); }
+
+.savedList { width:100%; list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:10px; }
+.savedList li { display:flex; justify-content:space-between; align-items:center; padding:12px 14px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow:var(--shadow); }
+
+.footer { padding:18px; color:var(--muted); font-size:0.85rem; }
+
+@media (max-width:600px) {
+  .swipeCard { border-radius:12px; }
+  .cardHero { height:360px; }
+  .artWrap img { max-width:88%; }
+}
