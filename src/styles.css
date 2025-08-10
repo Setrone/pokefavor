@@ -1,57 +1,24 @@
-:root {
-  --bg: #05060a;
-  --card: rgba(255,255,255,0.04);
-  --muted: #9aa4b2;
-  --text: #eaf2ff;
-  --accent: #34d399;
-  --danger: #ff6b6b;
-  --shadow: 0 14px 40px rgba(2,6,23,0.6);
-}
-
-[data-theme='light'] {
-  --bg: #f6f7fb;
-  --card: rgba(0,0,0,0.03);
-  --muted: #475569;
-  --text: #071124;
-  --accent: #16a34a;
-  --danger: #ef4444;
-  --shadow: 0 8px 24px rgba(15,23,42,0.06);
-}
-
-*{box-sizing:border-box}
-body,html,#root{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-
+:root{--bg:#05060a;--text:#eaf2ff;--accent:#34d399;--danger:#ff6b6b}
+[data-theme='dark']{}
+body,html,#root{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial}
 .app{min-height:100vh;position:relative;overflow:hidden}
-.bg-layer{position:fixed;inset:0;z-index:0;transition:background-color 320ms cubic-bezier(.2,.9,.2,1);filter:blur(26px) saturate(1.05);pointer-events:none}
+.bg-layer{position:fixed;inset:0;z-index:0;transition:background-color 240ms ease;filter:blur(26px);pointer-events:none}
 .header{position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:14px 20px;max-width:1100px;margin:18px auto 0;width:calc(100% - 40px)}
-.pokefavorLogo{font-weight:900;font-size:1.28rem;letter-spacing:-1px;color:var(--text);text-shadow:0 8px 24px rgba(0,0,0,0.6);cursor:pointer}
+.pokefavorLogo{font-weight:900;font-size:1.28rem;color:var(--text);cursor:pointer}
 .header-actions{display:flex;gap:10px;align-items:center}
-.toggle{display:flex;gap:8px;align-items:center;background:transparent;padding:6px 8px;border-radius:8px}
-.toggle input{width:18px;height:18px}
 .main{position:relative;z-index:5;max-width:760px;margin:28px auto;padding:18px;display:flex;flex-direction:column;align-items:center;gap:18px}
-.hero{text-align:center;padding:20px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow);width:100%}
-.logoTitle{font-family:Verdana,Arial,sans-serif;font-weight:900;letter-spacing:-1px;font-size:2.4rem;text-shadow:0 12px 30px rgba(0,0,0,0.6)}
 .swipeArea{width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;position:relative}
 .swipeCardOuter{width:100%;display:flex;justify-content:center;align-items:center;min-height:520px}
-.swipeCard{width:100%;max-width:560px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow);position:relative}
-.infoButton{position:absolute;top:12px;right:12px;z-index:6;width:36px;height:36px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.25);color:white;text-decoration:none;font-weight:700;backdrop-filter:blur(4px)}
-.cardHero{height:420px;display:flex;align-items:center;justify-content:center;background-position:center;background-size:cover}
-.artWrap{width:100%;display:flex;align-items:center;justify-content:center;position:relative}
-.artWrap img{max-width:92%;max-height:92%;transform:translateY(6px);user-select:none;pointer-events:none;transition:opacity 180ms ease}
-.artWrap .thumb{filter:blur(8px) saturate(0.9);transform:scale(1.02);opacity:0.95}
+.swipeCard{width:100%;max-width:560px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));position:relative;box-shadow:0 14px 40px rgba(2,6,23,0.6)}
+.cardHero{height:420px;display:flex;align-items:center;justify-content:center}
 .placeholder{width:200px;height:200px;border-radius:14px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));animation:pulse 1.2s infinite}
 @keyframes pulse{0%{opacity:1}50%{opacity:0.6}100%{opacity:1}}
-.cardInfo{padding:14px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;background:linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.12))}
-.pokeName{font-family:Trebuchet MS,Arial,sans-serif;font-weight:900;font-size:1.6rem;margin:0;text-align:center;letter-spacing:-0.5px;color:var(--text);text-shadow:0 10px 28px rgba(0,0,0,0.6)}
-.typeRow{display:flex;gap:8px;align-items:center;justify-content:center}
-.typeIcon svg{width:28px;height:28px;display:block;filter:drop-shadow(0 6px 12px rgba(0,0,0,0.45));border-radius:6px}
-.actions{display:flex;gap:12px;margin-top:6px}
-.btn{padding:10px 16px;border-radius:12px;border:none;font-weight:700;cursor:pointer;transform-origin:center;transition:transform 160ms ease,opacity 160ms ease}
+.cardInfo{padding:14px 18px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.pokeName{font-weight:900;font-size:1.6rem;margin:0;text-shadow:0 10px 28px rgba(0,0,0,0.6)}
+.actions{display:flex;gap:12px}
+.btn{padding:10px 16px;border-radius:12px;border:none;font-weight:700;cursor:pointer;transition:transform 160ms ease,opacity 160ms ease}
 .btn:active{transform:scale(0.96);opacity:0.85}
-.btn.like{background:linear-gradient(90deg,var(--accent),#60d394);color:white;box-shadow:0 8px 30px rgba(16,24,40,0.35)}
-.btn.dislike{background:linear-gradient(90deg,var(--danger),#ff8a8a);color:white;box-shadow:0 8px 30px rgba(16,24,40,0.25)}
-.hint{color:var(--muted);font-size:0.95rem}
-.footer{padding:18px;color:var(--muted);font-size:0.85rem}
-.savedList{width:100%;list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
-.savedList li{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow)}
-@media (max-width:600px){.swipeCard{border-radius:14px}.cardHero{height:360px}.pokeName{font-size:1.3rem}}
+.btn.like{background:linear-gradient(90deg,var(--accent),#60d394);color:white}
+.btn.dislike{background:linear-gradient(90deg,var(--danger),#ff8a8a);color:white}
+.modalBackdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;z-index:60}
+.modal{background:rgba(11,18,28,0.98);padding:18px;border-radius:12px;min-width:320px}
