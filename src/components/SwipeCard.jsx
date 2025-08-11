@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 const POKEAPI_BASE='https://pokeapi.co/api/v2';
+const TYPE_GRADIENT = {"normal": ["#A8A77A", "#6B6B4E"], "fire": ["#FFB56B", "#EE8130"], "water": ["#9BD0FF", "#6390F0"], "electric": ["#FFF59B", "#F7D02C"], "grass": ["#CFFFCB", "#7AC74C"], "ice": ["#DDF7FA", "#96D9D6"], "fighting": ["#F0B1A8", "#C22E28"], "poison": ["#E6C0F0", "#A33EA1"], "ground": ["#F0D8A8", "#E2BF65"], "flying": ["#EAD9FF", "#A98FF3"], "psychic": ["#FFCFEA", "#F95587"], "bug": ["#E9F7C7", "#A6B91A"], "rock": ["#E7D6B5", "#B6A136"], "ghost": ["#D6CFF6", "#735797"], "dragon": ["#E6DAFF", "#6F35FC"], "dark": ["#CFC7C0", "#705746"], "steel": ["#E6E9EE", "#B7B7CE"], "fairy": ["#FFE7F0", "#D685AD"]};
+
 const ARTWORK=id=>`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 const THUMB=id=>`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
@@ -58,9 +60,9 @@ export default function SwipeCard({ pokemon, onDecision }){
 
   return (
     <div className="swipeCardOuter">
-      <div className="swipeCard" ref={rootRef} style={{ transform:`translate3d(${drag.x}px, ${drag.y}px, 0) rotate(${drag.rot}deg)`, transition: drag.isDragging? 'none' : 'transform 320ms cubic-bezier(.2,.9,.2,1)', willChange:'transform' }}>
+      <div className="swipeCard noTouch" ref={rootRef} style={{ transform:`translate3d(${drag.x}px, ${drag.y}px, 0) rotate(${drag.rot}deg)`, transition: drag.isDragging? 'none' : 'transform 320ms cubic-bezier(.2,.9,.2,1)', willChange:'transform' }}>
         <a className="infoButton" href={bulbapediaUrl()} target="_blank" rel="noreferrer" title="Open on Bulbapedia">i</a>
-        <div className="cardHero" style={{ background:`radial-gradient(400px 300px at 50% 30%, rgba(255,255,255,0.06), rgba(0,0,0,0))` }}>
+        <div className="cardHero" style={{ background: details && details.types ? `radial-gradient(400px 300px at 50% 30%, ${ (TYPE_GRADIENT[details.types[0].type.name] || ['#111','#000'])[0] }, rgba(0,0,0,0))` : 'radial-gradient(400px 300px at 50% 30%, rgba(255,255,255,0.06), rgba(0,0,0,0))' }}>
           <div className="artWrap">
             {!imgLoaded && thumbLoaded && <img src={THUMB(id)} alt={pokemon.name} className="thumb" draggable={false} />}
             {imgLoaded ? <img src={ARTWORK(id)} alt={pokemon.name} draggable={false} /> : (!thumbLoaded && <div className="placeholder" />)}
@@ -70,7 +72,10 @@ export default function SwipeCard({ pokemon, onDecision }){
           <h2 className="pokeName">{displayName()}</h2>
           <div className="typeRow" aria-hidden>
             {details && details.types && details.types.map((t,i)=>(
-              <img key={i} src={TYPE_ICONS[t.type.name] || TYPE_ICONS['normal']} className="typeImg" alt={t.type.name} />
+              <div key={i} className="typeStack">
+                <img src={TYPE_ICONS[t.type.name] || TYPE_ICONS['normal']} className="typeImg" alt={t.type.name} />
+                <div className="typeLabel">{t.type.name.charAt(0).toUpperCase()+t.type.name.slice(1)}</div>
+              </div>
             ))}
           </div>
           <div className="actions">

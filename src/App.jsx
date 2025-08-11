@@ -48,7 +48,18 @@ export default function App(){
 
   useEffect(()=>{ document.documentElement.setAttribute('data-theme','dark'); },[]);
 
-  useEffect(()=>{
+  
+useEffect(()=>{
+  // lock body scroll during voting to ensure swipes work across the whole screen
+  if(flow === 'voting'){
+    try{ document.body.style.overflow = 'hidden'; document.documentElement.style.touchAction = 'none'; }catch(e){}
+  } else {
+    try{ document.body.style.overflow = ''; document.documentElement.style.touchAction = ''; }catch(e){}
+  }
+  return ()=>{ try{ document.body.style.overflow = ''; document.documentElement.style.touchAction = ''; }catch(e){} };
+},[flow]);
+
+useEffect(()=>{
     if(!allPokemon){
       fetch(`${POKEAPI_BASE}/pokemon?limit=100000&offset=0`).then(r=>r.json()).then(j=>{
         const filtered = j.results.filter(p=>!isExcluded(p.name));
@@ -145,7 +156,7 @@ export default function App(){
 
   return (
     <div className='app'>
-      <div className='bg-layer' style={{ background: `linear-gradient(180deg, ${bgGradient[0]}, ${bgGradient[1]})` }} key={fadeKey} />
+      <div className='bg-layer' style={{ background: 'linear-gradient(180deg, rgba(0,0,0,1), rgba(12,12,14,0.96) 60%, rgba(30,30,34,0.9) 100%)' }} key={fadeKey} />
       <Header startVoting={startVoting} savedResults={savedResults} setFlow={setFlow} saveManual={manualSavePrompt} openLoadModal={openLoadModal} />
       <main className='main'>
         { !allPokemon && <div className='notice'>Loading Pokémon list…</div> }

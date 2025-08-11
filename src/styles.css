@@ -35,3 +35,12 @@ body,html,#root{height:100%;margin:0;background:var(--bg);color:var(--text);font
 .savedList li{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:var(--shadow)}
 .footer{padding:18px;color:var(--muted);font-size:0.95rem}
 @media (max-width:600px){ .swipeCard{border-radius:14px} .cardHero{height:420px} .pokeName{font-size:1.6rem} .header{left:8px;right:8px} }
+
+
+/* v2.3 additions */
+.noTouch { touch-action: none; -ms-touch-action: none; -webkit-user-drag: none; }
+.typeStack { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.typeLabel { font-size:0.92rem; color:var(--muted); text-transform:capitalize; margin-top:4px; }
+.typeImg{width:36px;height:36px}
+.bg-layer{background: linear-gradient(180deg, rgba(0,0,0,1), rgba(12,12,14,0.98) 60%, rgba(30,30,34,0.9) 100%) !important}
+.cardHero{ /* card-level radial gradient will be set inline by component based on primary type */ }
